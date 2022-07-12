@@ -58,17 +58,8 @@
       }
     ],
     "import/no-extraneous-dependencies": "off",
-    "@typescript-eslint/explicit-module-boundary-types": [
-      "error"
-    ],
-    "no-unused-vars": [
-      "error",
-      {
-        "vars": "all",
-        "args": "after-used",
-        "ignoreRestSiblings": true
-      }
-    ],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"],
     "semi": [
       "error",
       "always"
@@ -110,7 +101,7 @@
       "error",
       "always",
       {
-        "objectsInObjects": true
+        "objectsInObjects": false
       }
     ],
     "array-bracket-spacing": [
@@ -121,15 +112,7 @@
         "objectsInArrays": false
       }
     ],
-    "space-in-parens": [
-      "error",
-      "always",
-      {
-        "exceptions": [
-          "empty"
-        ]
-      }
-    ],
+    "space-in-parens": ["error", "never"],
     "no-multi-spaces": "error",
     "key-spacing": [
       "error",
@@ -137,7 +120,7 @@
         "align": "value"
       }
     ],
-    "no-multiple-empty-lines": "error",
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
     "prefer-const": "error",
   },
 }

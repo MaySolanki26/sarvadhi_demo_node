@@ -10,20 +10,21 @@ const logLevels = {
   trace: 5,
   silly: 6,
 };
+
 const transportsClone: any = transports;
 
 const config = {
   // change level if in dev environment versus production
   levels: logLevels,
   format: format.combine(
-    format.timestamp( {
+    format.timestamp({
       format: DATE_FORMATE.TIMESTAMP,
-    } ),
-    format.printf( info => `${info.timestamp} ${info.level}: ${info.message}` )
+    }),
+    format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
   ),
   exitOnError: false,
   transports:  [
-    new transportsClone.Console( {
+    new transportsClone.Console({
       level:  process.env.LOGGER_LEVEL || 'silly',
       format: format.combine(
         format.colorize(),
@@ -31,8 +32,8 @@ const config = {
           info => `${info.timestamp} ${info.level}: ${info.message}`
         )
       ),
-    } ),
+    }),
   ],
 };
 
-export const logger = createLogger( config );
+export const logger = createLogger(config);

@@ -2,35 +2,49 @@
  * Required External Modules
  */
 import * as dotenv from 'dotenv';
-import express from 'express';
+import express,{ Express } from 'express';
 import cors from 'cors';
-import helmet from 'helmet';
+import { json, urlencoded } from 'body-parser';
+
+import * as routes from './routes/';
 import { logger } from './logger/Logger';
+import { environment } from './config';
 
 dotenv.config();
 
 /**
  * App Variables
  */
-if ( !process.env.PORT ) {
-  process.exit( 1 );
+if (!environment.port) {
+  process.exit(1);
 }
 
-const PORT: number = parseInt( process.env.PORT as string, 10 );
+const PORT: number = environment.port;
 
-const app = express();
+export class Server {
 
-/**
- *  App Configuration
- */
-app.use( helmet() );
-app.use( cors() );
-app.use( express.json() );
+  private app: Express;
 
-/**
- * Server Activation
- */
-app.listen( PORT, () => {
-  logger.info( `Listening on port ${PORT}` );
-  console.log( `Listening on port ${PORT}` );
-} );
+  constructor() {
+    this.app = express();
+
+    // Express middleware
+    this.app.use(cors({
+      optionsSuccessStatus: 200
+    }));
+    this.app.use(urlencoded({
+      extended: true
+    }));
+    this.app.use(json());
+    // this.app.use(expressValidator());
+    this.app.listen(PORT, () => {
+      logger.info(`--> Server successfully started at port ${PORT}`);
+    });
+    routes.initRoutes(this.app);
+  }
+
+  getApp() {
+    return this.app;
+  }
+}
+new Server();
