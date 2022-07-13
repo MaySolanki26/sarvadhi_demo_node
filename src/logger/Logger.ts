@@ -4,8 +4,8 @@ import { DATE_FORMATE } from '../utils/dateFormat';
 const logLevels = {
   fatal: 0,
   error: 1,
-  warn:  2,
-  info:  3,
+  warn: 2,
+  info: 3,
   debug: 4,
   trace: 5,
   silly: 6,
@@ -23,9 +23,9 @@ const config = {
     format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
   ),
   exitOnError: false,
-  transports:  [
+  transports: [
     new transportsClone.Console({
-      level:  process.env.LOGGER_LEVEL || 'silly',
+      level: process.env.LOGGER_LEVEL || 'silly',
       format: format.combine(
         format.colorize(),
         format.printf(

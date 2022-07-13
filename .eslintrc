@@ -114,12 +114,7 @@
     ],
     "space-in-parens": ["error", "never"],
     "no-multi-spaces": "error",
-    "key-spacing": [
-      "error",
-      {
-        "align": "value"
-      }
-    ],
+    "key-spacing": "error",
     "no-multiple-empty-lines": ["error", { "max": 1 }],
     "prefer-const": "error",
   },

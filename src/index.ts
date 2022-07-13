@@ -9,6 +9,7 @@ import { json, urlencoded } from 'body-parser';
 import * as routes from './routes/';
 import { logger } from './logger/Logger';
 import { environment } from './config';
+import { errorHandlerMiddleware, responseHandling } from './middleware';
 
 dotenv.config();
 
@@ -27,8 +28,6 @@ export class Server {
 
   constructor() {
     this.app = express();
-
-    // Express middleware
     this.app.use(cors({
       optionsSuccessStatus: 200
     }));
@@ -36,11 +35,12 @@ export class Server {
       extended: true
     }));
     this.app.use(json());
-    // this.app.use(expressValidator());
-    this.app.listen(PORT, () => {
-      logger.info(`--> Server successfully started at port ${PORT}`);
-    });
+    this.app.use(responseHandling);
     routes.initRoutes(this.app);
+    this.app.use(errorHandlerMiddleware);
+    this.app.listen(PORT, () => {
+      logger.info(`👍 Server successfully started at port ${PORT}`);
+    });
   }
 
   getApp() {
@@ -48,3 +48,4 @@ export class Server {
   }
 }
 new Server();
+

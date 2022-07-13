@@ -3,7 +3,6 @@ import db from '../models/';
 import { logger } from '../logger/Logger';
 
 export function verifyJWT_MW(req, res, next) {
-  console.log('Headers: ' + JSON.stringify(req.headers, null, 2));
   if (req.headers && req.headers['x-access-token']) {
     verifyJWTToken(req.headers['x-access-token']).then(decode => {
       db['User'].findOne({ where: { email: decode['email'], id: decode['id'] }}).then(function (user) {

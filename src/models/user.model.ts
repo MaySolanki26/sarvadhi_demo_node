@@ -7,18 +7,18 @@ dotenv.config({ path: './.env' });
 module.exports = function(sequelize, DataTypes) {
   const User = sequelize.define('User', {
     id: {
-      allowNull:    false,
-      type:         DataTypes.UUID,
+      allowNull: false,
+      type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV1,
-      primaryKey:   true
+      primaryKey: true
     },
     firstName: {
       allowNull: false,
-      type:      DataTypes.STRING
+      type: DataTypes.STRING
     },
     lastName: {
       allowNull: false,
-      type:      DataTypes.STRING
+      type: DataTypes.STRING
     },
     avatar: {
       type: DataTypes.STRING
@@ -28,34 +28,34 @@ module.exports = function(sequelize, DataTypes) {
     },
     password: {
       allowNull: false,
-      type:      DataTypes.STRING,
-      validate:  {
+      type: DataTypes.STRING,
+      validate: {
         notEmpty: true,
-        len:      [ 6, 100 ]
+        len: [ 6, 100 ]
       }
     },
     resetToken: {
       type: DataTypes.STRING
     },
     resetTokenSentAt: {
-      type:     DataTypes.DATE,
+      type: DataTypes.DATE,
       validate: {
         isDate: true
       }
     },
     resetTokenExpireAt: {
-      type:     DataTypes.DATE,
+      type: DataTypes.DATE,
       validate: {
         isDate: true
       }
     },
     email: {
       allowNull: false,
-      type:      DataTypes.STRING,
-      validate:  {
+      type: DataTypes.STRING,
+      validate: {
         len: {
           args: [ 6, 128 ],
-          msg:  'Email address must be between 6 and 128 characters in length'
+          msg: 'Email address must be between 6 and 128 characters in length'
         },
         isEmail: {
           msg: 'Email address must be valid'
@@ -63,22 +63,22 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     status: {
-      allowNull:    false,
-      type:         DataTypes.ENUM,
-      values:       [ 'pending' , 'accepted' ],
+      allowNull: false,
+      type: DataTypes.ENUM,
+      values: [ 'pending' , 'accepted' ],
       defaultValue: 'pending',
-      validate:     {
+      validate: {
         isIn: {
           args: [[ 'pending' , 'accepted' ]],
-          msg:  'Invalid status.'
+          msg: 'Invalid status.'
         }
       }
     }
   }, {
-    indexes:         [{ unique: true, fields: ['email'] }],
-    timestamps:      true,
+    indexes: [{ unique: true, fields: ['email'] }],
+    timestamps: true,
     freezeTableName: true,
-    tableName:       'users'
+    tableName: 'users'
   });
 
   User.beforeSave(user => {
@@ -86,6 +86,7 @@ module.exports = function(sequelize, DataTypes) {
       user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
     }
   });
+
   User.prototype.generateToken = function generateToken() {
     console.log('JWT:' + process.env.SECRET);
     return createJWToken({ email: this.email, id: this.id });

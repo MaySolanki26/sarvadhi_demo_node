@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import _ from 'lodash';
-import { validationResult } from 'express-validator';
 
 import db from '../../models';
 let model = 'Users';
@@ -10,21 +9,20 @@ class ApplicationController {
     model = m;
   }
 
-  _create(req, res, options = {}, callback = null) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+  async _create(req, res, options = {}, callback = null) {
+    const user = await db[model].findOne({ where: { email: req.body.email }});
+    if (!user) {
+      return db[model].create(req.body)
+        .then(appuser => res.status(201).send({ success: true, data: appuser, message: options['message'] || 'Successfully Created' }))
+        .catch(error => res.status(400).json({ errors: error }));
     }
-    req.body = _.pick(_.cloneDeep(req.body), req.pick || []);
-    return db[model].create(req.body)
-      .then(appuser => res.status(201).send({ success: true, data: appuser, message: options['message'] || 'Successfully Created' }))
-      .catch(error => res.boom.badRequest(error));
+    return res.status(400).json({ message: 'user already exits!' });
   }
 
   _list(req, res, options = {}, callback = null) {
     return db[model].findAll({ include: [{ all: true }] }).then(data =>
       res.status(200).send({ success: true, data: data }))
-      .catch(error => res.boom.badRequest(error));
+      .catch(error => res.status(400).json({ errors: error }));
   }
 
   _findOne(req, res, callback = null) {
