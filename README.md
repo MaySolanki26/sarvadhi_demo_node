@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./sarvadhi-tech.png" alt="sarvadhi solution" width="400" />
+  <img src="./sarvadhi.png" alt="sarvadhi solution" width="400" />
 </p>
 
 <h1 align="center">Express With Typescript</h1>
