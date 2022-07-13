@@ -20,7 +20,7 @@ if (!environment.port) {
   process.exit(1);
 }
 
-const PORT: number = environment.port;
+const PORT: number = environment.port || 3000;
 
 export class Server {
 
